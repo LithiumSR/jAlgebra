@@ -1,12 +1,14 @@
 import exception.AlgebraParserError;
 import model.AlgebraNode;
 import model.AlgebraValue;
+import model.LiteralPart;
+import model.enumeration.NodeName;
+import model.enumeration.NodeType;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import core.ExpressionParser;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpressionParserTest {
 
@@ -48,7 +50,7 @@ public class ExpressionParserTest {
     public void testNodeString() {
         AlgebraValue ret = (AlgebraValue) ExpressionParser.getAlgebraElement(
                 new JSONObject("{\n" +
-                        "    \"value\": \"ciao\",\n" +
+                        "    \"value\": \"hello\",\n" +
                         "    \"literal\": []\n" +
                         "}"));
         assertTrue(ret.getNum()==null && ret.getText()!=null);
@@ -79,6 +81,7 @@ public class ExpressionParserTest {
                         "      \"literal\":[]" +
                         "   }\n" +
                         "}"));
+        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.ABS, new AlgebraValue(10, new LiteralPart()), null), ret);
     }
 
     @Test
@@ -89,7 +92,7 @@ public class ExpressionParserTest {
                             "   \"type\":\"function\",\n" +
                             "   \"name\":\"abs\",\n" +
                             "   \"op1\":{\n" +
-                            "      \"value\":\"ciao\",\n" +
+                            "      \"value\":\"hello\",\n" +
                             "      \"literal\":[]" +
                             "   }\n" +
                             "}"));
@@ -105,10 +108,11 @@ public class ExpressionParserTest {
                         "   \"type\":\"function\",\n" +
                         "   \"name\":\"sizeof\",\n" +
                         "   \"op1\":{\n" +
-                        "      \"value\":\"ciao\",\n" +
+                        "      \"value\":\"hello\",\n" +
                         "      \"literal\":[]" +
                         "   }\n" +
                         "}"));
+        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.SIZEOF, new AlgebraValue("hello"), null), ret);
     }
 
     @Test
