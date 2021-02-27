@@ -1,10 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class LiteralPart {
+public class LiteralPart extends AlgebraElement {
     private final Map<String,Integer> map;
     public LiteralPart (Map<String, Integer> expMap) {
         this.map = new HashMap<>(expMap);
@@ -54,5 +57,16 @@ public class LiteralPart {
         return "LiteralPart{" +
                 "map=" + map +
                 '}';
+    }
+
+    public String toJson(){
+        JSONArray array = new JSONArray();
+        map.forEach((key, value) -> {
+            JSONObject tmp = new JSONObject();
+            tmp.put("value", key);
+            tmp.put("exponent", value);
+            array.put(tmp);
+        });
+        return array.toString();
     }
 }

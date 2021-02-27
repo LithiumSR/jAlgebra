@@ -3,11 +3,12 @@ package model;
 import model.enumeration.NodeName;
 import model.enumeration.NodeType;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
 
-public class AlgebraNode extends AlgebraElement{
+public class AlgebraNode extends AlgebraElement {
     private final NodeType type;
     private final NodeName func;
     private final AlgebraElement operand1;
@@ -61,5 +62,14 @@ public class AlgebraNode extends AlgebraElement{
                 ", operand1=" + operand1 +
                 ", operand2=" + operand2 +
                 '}';
+    }
+
+    public String toJson() {
+        JSONObject ret = new JSONObject();
+        ret.put("type", this.type.toString());
+        if (func!=null) ret.put("name", func);
+        ret.put("op1", new JSONObject(operand1.toJson()));
+        if (operand2 != null) ret.put("op2", new JSONObject(operand2.toJson()));
+        return ret.toString();
     }
 }

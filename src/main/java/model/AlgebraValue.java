@@ -1,9 +1,12 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 public class AlgebraValue extends AlgebraElement {
-    private double num;
+    private Double num;
     private String text;
     private LiteralPart literal;
     public AlgebraValue (double num, LiteralPart literal) {
@@ -12,7 +15,7 @@ public class AlgebraValue extends AlgebraElement {
     }
 
     public AlgebraValue (int num, LiteralPart literal) {
-        this.num = num;
+        this.num = (double) num;
         this.literal = literal;
     }
 
@@ -57,4 +60,12 @@ public class AlgebraValue extends AlgebraElement {
                 ", literal=" + literal +
                 '}';
     }
+
+    public String toJson() {
+        JSONObject ret = new JSONObject();
+        ret.put("value", (num == null) ? text : num);
+        ret.put("literal", new JSONArray(literal.toJson()));
+        return ret.toString();
+    }
+
 }
