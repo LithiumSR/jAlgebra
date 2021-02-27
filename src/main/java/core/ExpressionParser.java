@@ -23,30 +23,36 @@ public class ExpressionParser {
             throw new AlgebraParserError("Invalid cast", e);
         }
     }
+
     private static AlgebraElement _getAlgebraElement(JSONObject object) throws AlgebraParserError {
         if (object.has("value") && object.has("literal")) {
-            Map<String,Integer> literalMap = new HashMap<>();
+            Map<String, Integer> literalMap = new HashMap<>();
             JSONArray arrayLiteral = object.getJSONArray("literal");
-            for (int i = 0; i<arrayLiteral.length(); i++) {
+            for (int i = 0; i < arrayLiteral.length(); i++) {
                 JSONObject literalObj = arrayLiteral.getJSONObject(i);
-                if (literalMap.containsKey(literalObj.getString("value"))) throw new AlgebraParserError("Literals are not unique");
+                if (literalMap.containsKey(literalObj.getString("value")))
+                    throw new AlgebraParserError("Literals are not unique");
                 literalMap.put(literalObj.getString("value"), literalObj.getInt("exponent"));
             }
             Object value = object.get("value");
             if (value instanceof String) return new AlgebraValue((String) value);
-            else if (value instanceof Integer) return new AlgebraValue(Double.valueOf((Integer) value), new LiteralPart(literalMap));
-            else if (value instanceof BigDecimal) return new AlgebraValue(((BigDecimal) value).doubleValue(), new LiteralPart(literalMap));
+            else if (value instanceof Integer)
+                return new AlgebraValue(Double.valueOf((Integer) value), new LiteralPart(literalMap));
+            else if (value instanceof BigDecimal)
+                return new AlgebraValue(((BigDecimal) value).doubleValue(), new LiteralPart(literalMap));
             else throw new ClassCastException("Invalid type for value");
         } else if (object.has("type")) {
             NodeType type = NodeType.valueOf(object.getString("type").toUpperCase());
             if (type == NodeType.FUNCTION) {
-                if (!object.has("name") || !object.has("op1")) throw new AlgebraParserError("Missing op1 for unary function");
+                if (!object.has("name") || !object.has("op1"))
+                    throw new AlgebraParserError("Missing op1 for unary function");
                 NodeName name = NodeName.valueOf(object.getString("name").toUpperCase());
                 AlgebraElement op1 = getAlgebraElement(object.getJSONObject("op1"));
-                if (isFunctionCompatible(name,op1)) return new AlgebraNode(type, name, op1, null);
+                if (isFunctionCompatible(name, op1)) return new AlgebraNode(type, name, op1, null);
                 else throw new ClassCastException("Invalid pair function-value");
             } else {
-                if (!object.has("op2") || !object.has("op1")) throw new AlgebraParserError("Missing op1 or op2 for binary function");
+                if (!object.has("op2") || !object.has("op1"))
+                    throw new AlgebraParserError("Missing op1 or op2 for binary function");
                 AlgebraElement op1 = getAlgebraElement(object.getJSONObject("op1"));
                 AlgebraElement op2 = getAlgebraElement(object.getJSONObject("op2"));
                 return new AlgebraNode(type, null, op1, op2);
@@ -55,12 +61,12 @@ public class ExpressionParser {
     }
 
     private static boolean isFunctionCompatible(NodeName name, AlgebraElement element) {
-        if (element instanceof AlgebraValue){
+        if (element instanceof AlgebraValue) {
             switch (name) {
                 case ABS:
-                    return ((AlgebraValue) element).getNum()!=null;
+                    return ((AlgebraValue) element).getNum() != null;
                 case SIZEOF:
-                    return ((AlgebraValue) element).getText()!=null;
+                    return ((AlgebraValue) element).getText() != null;
                 default:
                     return false;
             }

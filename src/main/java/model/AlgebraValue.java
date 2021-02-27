@@ -9,17 +9,18 @@ public class AlgebraValue extends AlgebraElement {
     private Double num;
     private String text;
     private LiteralPart literal;
-    public AlgebraValue (double num, LiteralPart literal) {
+
+    public AlgebraValue(double num, LiteralPart literal) {
         this.num = num;
         this.literal = literal;
     }
 
-    public AlgebraValue (int num, LiteralPart literal) {
+    public AlgebraValue(int num, LiteralPart literal) {
         this.num = (double) num;
         this.literal = literal;
     }
 
-    public AlgebraValue (String text) {
+    public AlgebraValue(String text) {
         this.text = text;
     }
 
@@ -58,6 +59,7 @@ public class AlgebraValue extends AlgebraElement {
                 '}';
     }
 
+    @Override
     public String toJson() {
         JSONObject ret = new JSONObject();
         ret.put("value", (num == null) ? text : num);

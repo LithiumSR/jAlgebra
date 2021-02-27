@@ -37,7 +37,7 @@ public class AlgebraNode extends AlgebraElement {
         return operand2;
     }
 
-    public boolean isUnaryOperation(){
+    public boolean isUnaryOperation() {
         return type == NodeType.FUNCTION && Objects.requireNonNull(func).isUnary();
     }
 
@@ -64,10 +64,11 @@ public class AlgebraNode extends AlgebraElement {
                 '}';
     }
 
+    @Override
     public String toJson() {
         JSONObject ret = new JSONObject();
         ret.put("type", this.type.toString());
-        if (func!=null) ret.put("name", func);
+        if (func != null) ret.put("name", func);
         ret.put("op1", new JSONObject(operand1.toJson()));
         if (operand2 != null) ret.put("op2", new JSONObject(operand2.toJson()));
         return ret.toString();

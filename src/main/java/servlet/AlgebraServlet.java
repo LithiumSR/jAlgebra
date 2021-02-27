@@ -3,6 +3,7 @@ package servlet;
 import controller.AlgebraController;
 import io.javalin.Javalin;
 import io.javalin.http.JavalinServlet;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,14 +17,12 @@ public class AlgebraServlet extends HttpServlet {
 
 
     public AlgebraServlet() {
-        Javalin javalin = Javalin.createStandalone(config -> {
-            config.defaultContentType = "application/json";
-        });
+        Javalin javalin = Javalin.createStandalone(config -> config.defaultContentType = "application/json");
         javalinServlet = attachController(javalin).servlet();
     }
 
 
-    private Javalin attachController(Javalin javalin){
+    private Javalin attachController(Javalin javalin) {
         AlgebraController.attach(javalin);
         // I only have one controller :(
 
@@ -33,7 +32,7 @@ public class AlgebraServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        javalinServlet.service(req,resp);
+        javalinServlet.service(req, resp);
     }
 
 }

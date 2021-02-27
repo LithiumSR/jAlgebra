@@ -8,12 +8,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public class LiteralPart extends AlgebraElement {
-    private final Map<String,Integer> map;
-    public LiteralPart (Map<String, Integer> expMap) {
+    private final Map<String, Integer> map;
+
+    public LiteralPart(Map<String, Integer> expMap) {
         this.map = new HashMap<>(expMap);
     }
 
-    public LiteralPart () {
+    public LiteralPart() {
         this.map = new HashMap<>();
     }
 
@@ -59,7 +60,8 @@ public class LiteralPart extends AlgebraElement {
                 '}';
     }
 
-    public String toJson(){
+    @Override
+    public String toJson() {
         JSONArray array = new JSONArray();
         map.forEach((key, value) -> {
             JSONObject tmp = new JSONObject();

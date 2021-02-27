@@ -14,7 +14,7 @@ public class AlgebraHelper {
     public static AlgebraElement convertListToPlusTree(List<AlgebraValue> input) {
         AlgebraNode elem = null;
         for (AlgebraValue k : input) {
-            elem = new AlgebraNode(NodeType.PLUS,null, new AlgebraValue(k.getNum(),k.getLiteralPart().copy()), elem);
+            elem = new AlgebraNode(NodeType.PLUS, null, new AlgebraValue(k.getNum(), k.getLiteralPart().copy()), elem);
         }
         return elem;
     }
@@ -29,7 +29,7 @@ public class AlgebraHelper {
             else {
                 AlgebraNode node = (AlgebraNode) el;
                 toDo.add(node.getOperand1());
-                if (node.getOperand2()!=null) toDo.add(node.getOperand2());
+                if (node.getOperand2() != null) toDo.add(node.getOperand2());
             }
         }
         return ret;

@@ -1,6 +1,6 @@
 package model;
 
-public abstract class AlgebraElement implements JsonSerializable{
+public abstract class AlgebraElement implements JsonSerializable {
 }
 
 interface JsonSerializable {

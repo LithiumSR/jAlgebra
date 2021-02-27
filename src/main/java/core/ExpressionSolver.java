@@ -7,7 +7,10 @@ import model.AlgebraValue;
 import model.LiteralPart;
 import model.enumeration.NodeType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ExpressionSolver {
@@ -15,12 +18,13 @@ public class ExpressionSolver {
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
         AlgebraElement ret = mergePlusTree(plusTree);
-        if (ret instanceof AlgebraNode && ((AlgebraNode) ret).getOperand2() == null) return ((AlgebraNode) ret).getOperand1();
+        if (ret instanceof AlgebraNode && ((AlgebraNode) ret).getOperand2() == null)
+            return ((AlgebraNode) ret).getOperand1();
         else return ret;
     }
 
-    private static AlgebraElement mergePlusTree(AlgebraElement root){
-        HashMap<LiteralPart,List<AlgebraValue>> sameLiterals = new HashMap<>();
+    private static AlgebraElement mergePlusTree(AlgebraElement root) {
+        HashMap<LiteralPart, List<AlgebraValue>> sameLiterals = new HashMap<>();
         List<AlgebraValue> values = AlgebraHelper.getValues(root);
         for (AlgebraValue value : values) {
             if (value.getNum() == 0) continue;
@@ -30,7 +34,7 @@ public class ExpressionSolver {
         }
         List<AlgebraValue> summed = sameLiterals.entrySet().stream().map(el -> {
             double newValue = el.getValue().stream().mapToDouble(AlgebraValue::getNum).sum();
-            return new AlgebraValue(newValue,el.getKey().copy());
+            return new AlgebraValue(newValue, el.getKey().copy());
         }).collect(Collectors.toList());
         //System.out.println(summed);
         return AlgebraHelper.convertListToPlusTree(summed);
@@ -47,7 +51,7 @@ public class ExpressionSolver {
         } else {
             AlgebraElement right = computePlusTree(node.getOperand2());
             AlgebraElement left = computePlusTree(node.getOperand1());
-            return computeBinary(new AlgebraNode(node.getType(),node.getFunc(), left,right));
+            return computeBinary(new AlgebraNode(node.getType(), node.getFunc(), left, right));
         }
     }
 
@@ -68,9 +72,9 @@ public class ExpressionSolver {
         AlgebraElement op2 = node.getOperand2();
         switch (node.getType()) {
             case PLUS:
-                return new AlgebraNode(node.getType(),node.getFunc(),op1,op2);
+                return new AlgebraNode(node.getType(), node.getFunc(), op1, op2);
             case MINUS:
-                return new AlgebraNode(NodeType.PLUS,null,op1,applyTransformationMinus(op2));
+                return new AlgebraNode(NodeType.PLUS, null, op1, applyTransformationMinus(op2));
             case MULTIPLY:
                 return applyTransformationMultiply(op1, op2);
             case DIVIDE:
@@ -84,12 +88,12 @@ public class ExpressionSolver {
     private static AlgebraElement applyTransformationMinus(AlgebraElement op) {
         if (op instanceof AlgebraValue) {
             var elem = (AlgebraValue) op;
-            return new AlgebraValue(elem.getNum()*-1, elem.getLiteralPart().copy());
+            return new AlgebraValue(elem.getNum() * -1, elem.getLiteralPart().copy());
         } else {
             var elem = (AlgebraNode) op;
             AlgebraElement op1 = applyTransformationMinus(elem.getOperand1());
             AlgebraElement op2 = applyTransformationMinus(elem.getOperand2());
-            return new AlgebraNode(NodeType.PLUS,elem.getFunc(), op1, op2);
+            return new AlgebraNode(NodeType.PLUS, elem.getFunc(), op1, op2);
         }
     }
 
@@ -101,9 +105,9 @@ public class ExpressionSolver {
             LiteralPart litn = n.getLiteralPart();
             for (AlgebraValue k : nodes2) {
                 LiteralPart litk = k.getLiteralPart();
-                Map<String,Integer> newLitMap = new HashMap<>(litn.getLiterals());
+                Map<String, Integer> newLitMap = new HashMap<>(litn.getLiterals());
                 litk.getLiterals().forEach((key, value) -> newLitMap.put(key, newLitMap.getOrDefault(key, 0) + value));
-                tmp.add(new AlgebraValue((n.getNum()*k.getNum()), new LiteralPart(newLitMap)));
+                tmp.add(new AlgebraValue((n.getNum() * k.getNum()), new LiteralPart(newLitMap)));
             }
         }
         return AlgebraHelper.convertListToPlusTree(tmp);
@@ -118,14 +122,14 @@ public class ExpressionSolver {
             LiteralPart litn = n.getLiteralPart();
             for (AlgebraValue k : nodes2) {
                 LiteralPart litk = k.getLiteralPart();
-                Map<String,Integer> newLitMap = new HashMap<>(litn.getLiterals());
+                Map<String, Integer> newLitMap = new HashMap<>(litn.getLiterals());
                 litk.getLiterals().forEach((key, value) -> newLitMap.put(key, newLitMap.getOrDefault(key, 0) - value));
                 LinkedList<String> keysToRemove = new LinkedList<>();
                 newLitMap.forEach((key, value) -> {
                     if (value == 0) keysToRemove.add(key);
                 });
                 keysToRemove.forEach(newLitMap::remove);
-                tmp.add(new AlgebraValue(n.getNum()/k.getNum(), new LiteralPart(newLitMap)));
+                tmp.add(new AlgebraValue(n.getNum() / k.getNum(), new LiteralPart(newLitMap)));
             }
         }
         return AlgebraHelper.convertListToPlusTree(tmp);
