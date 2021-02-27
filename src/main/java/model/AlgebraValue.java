@@ -40,11 +40,8 @@ public class AlgebraValue extends AlgebraElement {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         AlgebraValue that = (AlgebraValue) o;
-
-        if (!num.equals(that.num)) return false;
-        return Objects.equals(literal, that.literal);
+        return Objects.equals(num, that.num) && Objects.equals(text, that.text) && Objects.equals(literal, that.literal);
     }
 
     @Override
