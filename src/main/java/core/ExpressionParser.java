@@ -43,13 +43,13 @@ public class ExpressionParser {
                 if (!object.has("name") || !object.has("op1")) throw new AlgebraParserError("Missing op1 for unary function");
                 NodeName name = NodeName.valueOf(object.getString("name").toUpperCase());
                 AlgebraElement op1 = getAlgebraElement(object.getJSONObject("op1"));
-                if (isFunctionCompatible(name,op1)) return new AlgebraNode(type, name, (AlgebraValue) op1, null);
+                if (isFunctionCompatible(name,op1)) return new AlgebraNode(type, name, op1, null);
                 else throw new ClassCastException("Invalid pair function-value");
             } else {
                 if (!object.has("op2") || !object.has("op1")) throw new AlgebraParserError("Missing op1 or op2 for binary function");
                 AlgebraElement op1 = getAlgebraElement(object.getJSONObject("op1"));
                 AlgebraElement op2 = getAlgebraElement(object.getJSONObject("op2"));
-                return new AlgebraNode(type, null, (AlgebraValue) op1,  (AlgebraValue) op2);
+                return new AlgebraNode(type, null, op1, op2);
             }
         } else throw new AlgebraParserError("Unknown algebra element");
     }
