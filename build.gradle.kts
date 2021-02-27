@@ -23,6 +23,13 @@ gretty {
     servletContainer = "tomcat9"
 }
 
+gradle.taskGraph.whenReady {
+    if (project.hasProperty("httpPort")) {
+        gretty.httpPort = Integer.valueOf(project.property("httpPort")!! as String)
+    }
+}
+
+
 tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
