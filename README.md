@@ -17,7 +17,7 @@ Specification:
     
 ### Example
 
-- (2*2a^2) + sizeof("ciao")
+- (2*2a^2) + sizeof("hello")
 ```
 {
     "type": "plus",
@@ -50,3 +50,15 @@ Specification:
     }
 }
 ```
+
+## Build and deploy
+In order to build and deploy the webservice use the following command:
+```gradlew -PhttpPort=8888 appRunWar```
+
+The appRunWar task will take care compiling a war file and deploying in a Tomcat9 instance accessible from ```http://localhost:PORT```
+
+If you are only interested in building a war file use the command: ```gradlew war```. The output war can be found in the build folder.
+
+## How to use
+1. Send a post request following the proposed specification at ```http://localhost:PORT/algebra/solver```
+2. Read the response of the server (the body is a JSON object represeting the result of the algebraic expression)
