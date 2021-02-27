@@ -2,7 +2,7 @@
 
 A webservice to solve algebraic expressions
 
-##JSON format
+## JSON format
 Specification:
 - Each operation is a JSON object (let's call it AlgebraNode from now on) composed by up to 4 parameters: type (enum), name (enum), op1 (AlgebraValue), op2 (AlgebraValue).
 - Operands op1 and op2 are expressed using a JSON object (AlgebraValue) composed by a 2 required parameter: value and literal.
