@@ -24,11 +24,16 @@ public class AlgebraController {
             }
             AlgebraElement root = ExpressionParser.getAlgebraElement(expression);
             AlgebraElement solution = ExpressionSolver.solve(root);
-            ctx.result("TODO");
+            ctx.result(solution.toJson());
         } catch (JSONException exception) {
             JSONObject obj = new JSONObject();
             obj.put("error", 400);
             obj.put("message", "Invalid JSON input file");
+            ctx.result(obj.toString());
+        } catch (Exception e) {
+            JSONObject obj = new JSONObject();
+            obj.put("error", 500);
+            obj.put("message", "Internal error");
             ctx.result(obj.toString());
         }
     }
