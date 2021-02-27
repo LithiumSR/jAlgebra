@@ -23,6 +23,7 @@ public class ExpressionSolver {
         HashMap<LiteralPart,List<AlgebraValue>> sameLiterals = new HashMap<>();
         List<AlgebraValue> values = AlgebraHelper.getValues(root);
         for (AlgebraValue value : values) {
+            if (value.getNum() == 0) continue;
             sameLiterals.putIfAbsent(value.getLiteralPart(), new LinkedList<>());
             List<AlgebraValue> tmp = sameLiterals.get(value.getLiteralPart());
             tmp.add(value);
@@ -105,7 +106,6 @@ public class ExpressionSolver {
                 tmp.add(new AlgebraValue((n.getNum()*k.getNum()), new LiteralPart(newLitMap)));
             }
         }
-        //System.out.println(tmp);
         return AlgebraHelper.convertListToPlusTree(tmp);
     }
 
