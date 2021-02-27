@@ -43,7 +43,7 @@ public class AlgebraValue extends AlgebraElement {
 
         AlgebraValue that = (AlgebraValue) o;
 
-        if (num != that.num) return false;
+        if (!num.equals(that.num)) return false;
         return Objects.equals(literal, that.literal);
     }
 
