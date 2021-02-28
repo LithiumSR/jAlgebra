@@ -58,7 +58,7 @@ In order to build and deploy the webservice use the following command:
 
 The appRunWar task will take care compiling a war file and deploying in a Tomcat9 instance accessible from ```http://localhost:PORT```
 
-If you are only interested in building a war file use the command: ```gradlew war```. The output war can be found in the build folder.
+If you are only interested in building a war file use the command: ```gradlew war```. The output war can be found in the ```build/libs``` folder.
 
 ## How to use
 1. Send a post request following the proposed specification at ```http://localhost:PORT/algebra/solver```. The body of the request must contain the JSON object representing the algebraic exprassion you wish to solve.
