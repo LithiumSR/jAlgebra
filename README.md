@@ -61,5 +61,5 @@ The appRunWar task will take care compiling a war file and deploying in a Tomcat
 If you are only interested in building a war file use the command: ```gradlew war```. The output war can be found in the build folder.
 
 ## How to use
-1. Send a post request following the proposed specification at ```http://localhost:PORT/algebra/solver```
+1. Send a post request following the proposed specification at ```http://localhost:PORT/algebra/solver```. The body of the request must contain the JSON object representing the algebraic exprassion you wish to solve.
 2. Read the response of the server (the body is a JSON object represeting the result of the algebraic expression)

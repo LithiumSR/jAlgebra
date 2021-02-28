@@ -12,10 +12,10 @@ import org.json.JSONObject;
 public class AlgebraController {
 
     public static void attach(Javalin javalinInstnace) {
-        javalinInstnace.get("/algebra/solver", AlgebraController::get).servlet();
+        javalinInstnace.post("/algebra/solver", AlgebraController::post).servlet();
     }
 
-    private static void get(Context ctx) {
+    private static void post(Context ctx) {
         String body = ctx.body();
         try {
             JSONObject expression = new JSONObject(body);
