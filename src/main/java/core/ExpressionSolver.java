@@ -18,7 +18,7 @@ public class ExpressionSolver {
      */
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
-        return mergePlusTree(plusTree);
+        return AlgebraHelper.replaceDenominatorWithMultiply(mergePlusTree(plusTree));
     }
 
     /**
@@ -50,7 +50,7 @@ public class ExpressionSolver {
             int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
             ret.add(new AlgebraValue(sum, key.copy(), key2));
         }));
-        return AlgebraHelper.replaceDenominatorWithMultiply(AlgebraHelper.convertListToPlusTree(ret));
+        return AlgebraHelper.convertListToPlusTree(ret);
     }
 
 
@@ -184,10 +184,8 @@ public class ExpressionSolver {
                     .flatMap(List::stream)
                     .filter(it -> it.getNum() != 1 || !it.getLiteralPart().getLiterals().isEmpty() || it.getDenom() != null)
                     .collect(Collectors.toList());
-            System.out.println("newDenom "+newDenominator);
             tmp.add(new AlgebraValue(n.getNum() / gcd, newLiteral, (newDenominator.isEmpty()) ? null : AlgebraHelper.convertListToPlusTree(newDenominator)));
         }
-
         return AlgebraHelper.convertListToPlusTree(tmp);
     }
 
