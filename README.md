@@ -4,17 +4,17 @@ A webservice to solve algebraic expressions
 
 ## JSON format
 Specification:
-- Each operation is a JSON object (let's call it AlgebraNode from now on) composed by up to 4 parameters: type (enum), name (enum), op1 (AlgebraValue), op2 (AlgebraValue).
-- Operands op1 and op2 are expressed using a JSON object (AlgebraValue) composed by a 2 required parameter: value and literal.
-    - value parameter in AlgebraValue is an integer or string
-    - the literal part is an array of JSON objects (LiteralPart).
-        - LiteralPart object has two required parameters: value (string) and exponent (integer).
-- An AlgebraNode type can be one of the following: plus, minus, multiply, divide or function
-    - If type is different than "function" then both op1 and op2 are required and must be either an AlgebraNode or ValueNode objects. Otherwise, depending on the function, only op1 or both op1 and op2 are required.
-    - When AlgebraNode type is "function" an optional "name" parameter is required. At this point, name parameter can either be "abs" or "sizeof".
-    - SizeOf function can work only on one operand that is an AlgebraValue with a string type value.
-    - Abs function can work only on one operand that is an AlgebraValue with a integer type value (literals are allowed).
-    
+- Each operation is a JSON object (let's call it _**AlgebraNode**_ from now on) composed of up to 4 parameters: type (enum), name (enum), op1 (AlgebraValue), op2 (AlgebraValue).
+- Operands op1 and op2 are represented using a JSON object (_**AlgebraValue**_) composed by a 2 required parameters: _value_ and _literal_.
+  - _value_ parameter in AlgebraValue is an integer or string
+  - the _literal_ part is an array of JSON objects (_**LiteralPart**_).
+    - LiteralPart object has two required parameters: _value_ (string) and _exponent_ (integer).
+- An _**AlgebraNode**_ _type_ can be one of the following strings: "plus", "minus", "multiply", "divide" or "function" (case insensitive).
+  - If _type_ is different than "function" then both _op1_ and _op2_ are required and must be either an AlgebraNode or ValueNode object. Otherwise, depending on the function, only _op1_ or both _op1_ and _op2_ are required.
+  - When AlgebraNode type is "function" an optional "name" parameter is required. At this point, the _name_ parameter can either be "abs" or "sizeof".
+  - sizeOf() function can work only on one operand that is an AlgebraValue with a string type value.
+  - abs() function can work only on one operand that is an AlgebraValue with an integer type value (literals are allowed).
+  
 ### Example
 
 - (2*2a^2) + sizeof("hello")
