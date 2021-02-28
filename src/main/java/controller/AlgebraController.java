@@ -27,17 +27,17 @@ public class AlgebraController {
             ctx.result(solution.toJson());
         } catch (JSONException exception) {
             JSONObject obj = new JSONObject();
-            obj.put("error", 400);
+            obj.put("exception", 400);
             obj.put("message", "Invalid JSON input file");
             ctx.result(obj.toString());
         } catch (ArithmeticException e) {
             JSONObject obj = new JSONObject();
-            obj.put("error", 400);
+            obj.put("exception", 400);
             obj.put("message", "Division by 0");
             ctx.result(obj.toString());
         } catch (Exception e) {
             JSONObject obj = new JSONObject();
-            obj.put("error", 500);
+            obj.put("exception", 500);
             obj.put("message", "Internal error");
             ctx.result(obj.toString());
         }

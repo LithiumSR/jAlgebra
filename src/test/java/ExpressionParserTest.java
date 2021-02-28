@@ -1,7 +1,6 @@
-import error.AlgebraParserError;
+import exception.AlgebraParserException;
 import model.AlgebraNode;
 import model.AlgebraValue;
-import model.LiteralPart;
 import model.enumeration.NodeName;
 import model.enumeration.NodeType;
 import org.json.JSONObject;
@@ -35,7 +34,7 @@ public class ExpressionParserTest {
 
     @Test
     public void testNodeNumericWithLiteralsErrorRepeat() {
-        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+        assertThrows(AlgebraParserException.class, () -> ExpressionParser.getAlgebraElement(
                 new JSONObject("{\n" +
                         "    \"value\": 12,\n" +
                         "    \"literal\": [{value: \"a\", exponent: 3}, {value: \"a\", exponent: 1}]\n" +
@@ -70,7 +69,7 @@ public class ExpressionParserTest {
 
     @Test
     public void testValidityAbsError() {
-        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+        assertThrows(AlgebraParserException.class, () -> ExpressionParser.getAlgebraElement(
                 new JSONObject("{\n" +
                         "   \"type\":\"function\",\n" +
                         "   \"name\":\"abs\",\n" +
@@ -99,7 +98,7 @@ public class ExpressionParserTest {
 
     @Test
     public void testValiditySizeOfError() {
-        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+        assertThrows(AlgebraParserException.class, () -> ExpressionParser.getAlgebraElement(
                 new JSONObject("{\n" +
                         "   \"type\":\"function\",\n" +
                         "   \"name\":\"sizeof\",\n" +
