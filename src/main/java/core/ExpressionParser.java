@@ -1,6 +1,6 @@
 package core;
 
-import exception.AlgebraParserError;
+import error.AlgebraParserError;
 import model.AlgebraElement;
 import model.AlgebraNode;
 import model.AlgebraValue;

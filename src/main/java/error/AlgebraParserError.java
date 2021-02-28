@@ -1,4 +1,4 @@
-package exception;
+package error;
 
 public class AlgebraParserError extends Error {
 
