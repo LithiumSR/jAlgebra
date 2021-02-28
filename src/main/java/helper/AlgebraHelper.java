@@ -38,7 +38,7 @@ public class AlgebraHelper {
             AlgebraValue value = (AlgebraValue) element;
             if (value.getDenom() == null) return new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null);
             else
-                return new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null), replaceDenominatorWithMultiply(value.getDenom()));
+                return new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null), new AlgebraNode(NodeType.DIVIDE, null, new AlgebraValue(1, new LiteralPart()), replaceDenominatorWithMultiply(value.getDenom()) ));
         }
     }
 
