@@ -13,13 +13,13 @@ public class AlgebraValue extends AlgebraElement {
 
     public AlgebraValue(int num, LiteralPart literal) {
         this.num = num;
-        this.literal = literal;
+        this.literal = (literal == null) ? new LiteralPart() : literal;
     }
 
 
     public AlgebraValue(int num, LiteralPart literal, AlgebraElement denom) {
         this.num = num;
-        this.literal = literal;
+        this.literal = (literal == null) ? new LiteralPart() : literal;
         this.denom = denom;
     }
 

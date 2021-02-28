@@ -35,13 +35,11 @@ public class ExpressionParserTest {
 
     @Test
     public void testNodeNumericWithLiteralsErrorRepeat() {
-        assertThrows(AlgebraParserError.class, () -> {
-            ExpressionParser.getAlgebraElement(
-                    new JSONObject("{\n" +
-                            "    \"value\": 12,\n" +
-                            "    \"literal\": [{value: \"a\", exponent: 3}, {value: \"a\", exponent: 1}]\n" +
-                            "}"));
-        });
+        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+                new JSONObject("{\n" +
+                        "    \"value\": 12,\n" +
+                        "    \"literal\": [{value: \"a\", exponent: 3}, {value: \"a\", exponent: 1}]\n" +
+                        "}")));
     }
 
 
@@ -56,20 +54,6 @@ public class ExpressionParserTest {
         assertTrue(ret.getNum()==null && ret.getText()!=null);
     }
 
-    /**
-    @Test
-    public void testWrongCast() {
-        assertThrows(AlgebraParserException.class, () -> {
-            ExpressionParser.getAlgebraElement(
-                    new JSONObject("{\n" +
-                            "    \"value\": 12.fdsgfds,\n" +
-                            "    \"literal\": []\n" +
-                            "}"));
-                });
-
-    }
-     **/
-
     @Test
     public void testValidityAbs() {
         AlgebraNode ret = (AlgebraNode) ExpressionParser.getAlgebraElement(
@@ -81,22 +65,20 @@ public class ExpressionParserTest {
                         "      \"literal\":[]" +
                         "   }\n" +
                         "}"));
-        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.ABS, new AlgebraValue(10, new LiteralPart()), null), ret);
+        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.ABS, new AlgebraValue(10, null), null), ret);
     }
 
     @Test
     public void testValidityAbsError() {
-        assertThrows(AlgebraParserError.class, () -> {
-            ExpressionParser.getAlgebraElement(
-                    new JSONObject("{\n" +
-                            "   \"type\":\"function\",\n" +
-                            "   \"name\":\"abs\",\n" +
-                            "   \"op1\":{\n" +
-                            "      \"value\":\"hello\",\n" +
-                            "      \"literal\":[]" +
-                            "   }\n" +
-                            "}"));
-        });
+        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+                new JSONObject("{\n" +
+                        "   \"type\":\"function\",\n" +
+                        "   \"name\":\"abs\",\n" +
+                        "   \"op1\":{\n" +
+                        "      \"value\":\"hello\",\n" +
+                        "      \"literal\":[]" +
+                        "   }\n" +
+                        "}")));
     }
 
 
@@ -117,16 +99,14 @@ public class ExpressionParserTest {
 
     @Test
     public void testValiditySizeOfError() {
-        assertThrows(AlgebraParserError.class, () -> {
-            ExpressionParser.getAlgebraElement(
-                    new JSONObject("{\n" +
-                            "   \"type\":\"function\",\n" +
-                            "   \"name\":\"sizeof\",\n" +
-                            "   \"op1\":{\n" +
-                            "      \"value\": 10,\n" +
-                            "      \"literal\":[]" +
-                            "   }\n" +
-                            "}"));
-        });
+        assertThrows(AlgebraParserError.class, () -> ExpressionParser.getAlgebraElement(
+                new JSONObject("{\n" +
+                        "   \"type\":\"function\",\n" +
+                        "   \"name\":\"sizeof\",\n" +
+                        "   \"op1\":{\n" +
+                        "      \"value\": 10,\n" +
+                        "      \"literal\":[]" +
+                        "   }\n" +
+                        "}")));
     }
 }

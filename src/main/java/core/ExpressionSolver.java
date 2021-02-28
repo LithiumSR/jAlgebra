@@ -81,7 +81,7 @@ public class ExpressionSolver {
             case ABS:
                 return new AlgebraValue(Math.abs(op1.getNum()), op1.getLiteralPart().copy());
             case SIZEOF:
-                return new AlgebraValue(op1.getText().length(), new LiteralPart());
+                return new AlgebraValue(op1.getText().length(), null);
             default:
                 return null;
         }
@@ -141,8 +141,8 @@ public class ExpressionSolver {
      */
     private static AlgebraElement applyTransformationMultiply(AlgebraElement op1, AlgebraElement op2) {
         if (op1 == null && op2 == null) return null;
-        List<AlgebraValue> nodes1 = (op1 == null) ? List.of(new AlgebraValue(1, new LiteralPart())) : AlgebraHelper.getValues(op1);
-        List<AlgebraValue> nodes2 = (op2 == null) ? List.of(new AlgebraValue(1, new LiteralPart())) : AlgebraHelper.getValues(op2);
+        List<AlgebraValue> nodes1 = (op1 == null) ? List.of(new AlgebraValue(1, null)) : AlgebraHelper.getValues(op1);
+        List<AlgebraValue> nodes2 = (op2 == null) ? List.of(new AlgebraValue(1, null)) : AlgebraHelper.getValues(op2);
         LinkedList<AlgebraValue> tmp = new LinkedList<>();
         for (AlgebraValue n : nodes1) {
             LiteralPart litn = n.getLiteralPart();
