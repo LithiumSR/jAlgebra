@@ -7,7 +7,10 @@ import model.AlgebraValue;
 import model.LiteralPart;
 import model.enumeration.NodeType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ExpressionSolver {
@@ -18,40 +21,7 @@ public class ExpressionSolver {
      */
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
-        return AlgebraHelper.replaceDenominatorWithMultiply(mergePlusTree(plusTree, true));
-    }
-
-    /**
-     * @param root Starting element of an expression tree containing only PLUS operations
-     * @param removeZero Boolean value flag. If true zero value elements are removed from the output otherwise they are kept
-     * @return Starting element of an expression tree where 1) Elements with same literals and denominator are summed 2) Denominators are replaced with a multiply operation
-     */
-    private static AlgebraElement mergePlusTree(AlgebraElement root, boolean removeZero) {
-        HashMap<LiteralPart, List<AlgebraValue>> sameLiterals = new HashMap<>();
-        List<AlgebraValue> values = AlgebraHelper.getValues(root);
-        for (AlgebraValue value : values) {
-            if (value.getNum() == 0) continue;
-            sameLiterals.putIfAbsent(value.getLiteralPart(), new LinkedList<>());
-            List<AlgebraValue> tmp = sameLiterals.get(value.getLiteralPart());
-            tmp.add(value);
-        }
-        List<AlgebraValue> ret = new LinkedList<>();
-        var sameLiteralsGroupedByDenom = sameLiterals.entrySet().stream()
-                .map(it -> Map.entry(it.getKey(), it.getValue().stream().collect(Collectors.toMap(AlgebraValue::getDenom, x -> {
-                        List<AlgebraValue> list = new ArrayList<>();
-                        list.add(x);
-                        return list;
-                    }, (left, right) -> {
-                        left.addAll(right);
-                        return left;
-                    }, HashMap::new))))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        sameLiteralsGroupedByDenom.forEach((key, value) -> value.forEach((key2, value2) -> {
-            int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
-            if (sum != 0 || !removeZero) ret.add(new AlgebraValue(sum, key.copy(), key2));
-        }));
-        return AlgebraHelper.convertListToPlusTree(ret);
+        return AlgebraHelper.expandDenominator(AlgebraHelper.mergePlusTree(plusTree, true));
     }
 
 
@@ -72,6 +42,7 @@ public class ExpressionSolver {
             return computeBinary(new AlgebraNode(node.getType(), node.getFunc(), left, right));
         }
     }
+
 
     /**
      * @param node AlgebraNode featuring an unary operation
@@ -165,9 +136,9 @@ public class ExpressionSolver {
      */
 
     private static AlgebraElement applyTransformationDivide(AlgebraElement op1, AlgebraElement op2) {
-        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1)), false));
-        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2)), false));
-        if ((op2 instanceof AlgebraValue && ((AlgebraValue) op2).getNum() == 0) || nodes2.stream().filter(it -> it.getNum() == 0).count() ==1)
+        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(AlgebraHelper.mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1)), false));
+        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(AlgebraHelper.mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2)), false));
+        if ((op2 instanceof AlgebraValue && ((AlgebraValue) op2).getNum() == 0) || nodes2.stream().filter(it -> it.getNum() == 0).count() == 1)
             throw new ArithmeticException("Division by 0");
         Map<String, Integer> commonOp2 = AlgebraHelper.getCommonLiterals(nodes2);
         int gcdOp2 = AlgebraHelper.findGCD(nodes2);

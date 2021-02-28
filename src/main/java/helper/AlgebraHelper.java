@@ -11,6 +11,41 @@ import java.util.stream.Collectors;
 
 public class AlgebraHelper {
 
+
+    /**
+     * @param root       Starting element of an expression tree containing only PLUS operations
+     * @param removeZero Boolean value flag. If true zero value elements are removed from the output otherwise they are kept
+     * @return Starting element of an expression tree where elements with same literals and denominator are summed
+     */
+    public static AlgebraElement mergePlusTree(AlgebraElement root, boolean removeZero) {
+        HashMap<LiteralPart, List<AlgebraValue>> sameLiterals = new HashMap<>();
+        List<AlgebraValue> values = AlgebraHelper.getValues(root);
+        for (AlgebraValue value : values) {
+            if (value.getNum() == 0) continue;
+            sameLiterals.putIfAbsent(value.getLiteralPart(), new LinkedList<>());
+            List<AlgebraValue> tmp = sameLiterals.get(value.getLiteralPart());
+            tmp.add(value);
+        }
+        List<AlgebraValue> ret = new LinkedList<>();
+        var sameLiteralsGroupedByDenom = sameLiterals.entrySet().stream()
+                .map(it -> Map.entry(it.getKey(), it.getValue().stream().collect(Collectors.toMap(AlgebraValue::getDenom, x -> {
+                    List<AlgebraValue> list = new ArrayList<>();
+                    list.add(x);
+                    return list;
+                }, (left, right) -> {
+                    left.addAll(right);
+                    return left;
+                }, HashMap::new))))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        sameLiteralsGroupedByDenom.forEach((key, value) -> value.forEach((key2, value2) -> {
+            int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
+            if (sum != 0 || !removeZero) ret.add(new AlgebraValue(sum, key.copy(), key2));
+        }));
+        return AlgebraHelper.convertListToPlusTree(ret);
+    }
+
+
     /**
      * @param input List of AlgebraValue elements
      * @return AlgebraElement representing an expression tree where the input values are chained with PLUS operations
@@ -29,16 +64,19 @@ public class AlgebraHelper {
      * @param element AlgebraElement representing an expression tree
      * @return AlgebraElement where denominators are replaced with a multiply operations with their reverse
      */
-    public static AlgebraElement replaceDenominatorWithMultiply(AlgebraElement element) {
+    public static AlgebraElement expandDenominator(AlgebraElement element) {
         if (element == null) return null;
         if (element instanceof AlgebraNode) {
             AlgebraNode node = (AlgebraNode) element;
-            return new AlgebraNode(node.getType(), node.getFunc(), replaceDenominatorWithMultiply(node.getOperand1()), replaceDenominatorWithMultiply(node.getOperand2()));
+            return new AlgebraNode(node.getType(), node.getFunc(), expandDenominator(node.getOperand1()), expandDenominator(node.getOperand2()));
         } else {
             AlgebraValue value = (AlgebraValue) element;
             if (value.getDenom() == null) return new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null);
             else
-                return new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null), new AlgebraNode(NodeType.DIVIDE, null, new AlgebraValue(1, null), replaceDenominatorWithMultiply(value.getDenom())));
+                return new AlgebraNode(NodeType.MULTIPLY, null,
+                        new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null),
+                        new AlgebraNode(NodeType.DIVIDE, null, new AlgebraValue(1, null),
+                                expandDenominator(value.getDenom())));
         }
     }
 
