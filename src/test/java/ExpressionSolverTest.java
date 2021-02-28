@@ -83,7 +83,7 @@ public class ExpressionSolverTest {
     @Test
     public void testGCD() {
         var ret = AlgebraHelper.findGCD(List.of(new AlgebraValue(3, null), new AlgebraValue(-3, null), new AlgebraValue(5, null)));
-        System.out.println(ret);
+        assertEquals(ret,1);
     }
 
     @Test
@@ -154,26 +154,6 @@ public class ExpressionSolverTest {
         assertEquals(ExpressionSolver.solve(new AlgebraNode(NodeType.DIVIDE, null, n1, new AlgebraNode(NodeType.PLUS, null, n2, n3))),
                 new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(-3, lit.copy()), new AlgebraNode(NodeType.DIVIDE, null, new AlgebraValue(1, null),
                         new AlgebraNode(NodeType.PLUS, null, new AlgebraValue(7, lit2.copy()), new AlgebraNode(NodeType.PLUS, null, new AlgebraValue(5, lit3.copy()), null)))));
-    }
-
-    @Test
-    public void testNestedDivide() {
-        AlgebraValue n1 = new AlgebraValue(1, new LiteralPart(Map.of("a", 1)));
-        AlgebraValue n2 = new AlgebraValue(1, new LiteralPart(Map.of("b", 1)));
-        AlgebraValue n3 = new AlgebraValue(1, new LiteralPart(Map.of("c", 1)));
-        AlgebraValue n4 = new AlgebraValue(1, new LiteralPart(Map.of("d", 1)));
-        AlgebraValue n5 = new AlgebraValue(1, new LiteralPart(Map.of("e", 1)));
-        AlgebraNode d1 = new AlgebraNode(NodeType.DIVIDE, null, n2, n3);
-        AlgebraNode d2 = new AlgebraNode(NodeType.DIVIDE, null, n4, n5);
-        System.out.println(ExpressionSolver.solve(new AlgebraNode(NodeType.PLUS, null , d1,d2)).toJson());
-        System.out.println(ExpressionSolver.solve(new AlgebraNode(NodeType.DIVIDE, null, n1, new AlgebraNode(NodeType.PLUS, null, d1, d2))).toJson());
-        /**
-         assertEquals(ExpressionSolver.solve(,
-         new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(1, new LiteralPart(Map.of("a",1)),
-         new AlgebraNode(NodeType.DIVIDE, null, new AlgebraValue(1,new LiteralPart())))));
-         System.out.println();
-         */
-
     }
 
 }
