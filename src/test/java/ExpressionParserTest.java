@@ -1,4 +1,4 @@
-import exception.AlgebraParserError;
+import error.AlgebraParserError;
 import model.AlgebraNode;
 import model.AlgebraValue;
 import model.LiteralPart;
