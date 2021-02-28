@@ -37,9 +37,7 @@ public class ExpressionParser {
             Object value = object.get("value");
             if (value instanceof String) return new AlgebraValue((String) value);
             else if (value instanceof Integer)
-                return new AlgebraValue(Double.valueOf((Integer) value), new LiteralPart(literalMap));
-            else if (value instanceof BigDecimal)
-                return new AlgebraValue(((BigDecimal) value).doubleValue(), new LiteralPart(literalMap));
+                return new AlgebraValue((Integer) value, new LiteralPart(literalMap));
             else throw new ClassCastException("Invalid type for value");
         } else if (object.has("type")) {
             NodeType type = NodeType.valueOf(object.getString("type").toUpperCase());

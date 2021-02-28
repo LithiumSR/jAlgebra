@@ -6,25 +6,28 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class AlgebraValue extends AlgebraElement {
-    private Double num;
+    private Integer num;
     private String text;
     private LiteralPart literal;
+    private AlgebraElement denom;
 
-    public AlgebraValue(double num, LiteralPart literal) {
+    public AlgebraValue(int num, LiteralPart literal) {
         this.num = num;
         this.literal = literal;
     }
 
-    public AlgebraValue(int num, LiteralPart literal) {
-        this.num = (double) num;
+
+    public AlgebraValue(int num, LiteralPart literal, AlgebraElement denom) {
+        this.num = num;
         this.literal = literal;
+        this.denom = denom;
     }
 
     public AlgebraValue(String text) {
         this.text = text;
     }
 
-    public Double getNum() {
+    public Integer getNum() {
         return num;
     }
 
@@ -36,6 +39,9 @@ public class AlgebraValue extends AlgebraElement {
         return literal;
     }
 
+    public AlgebraElement getDenom() {
+        return denom;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -56,6 +62,7 @@ public class AlgebraValue extends AlgebraElement {
                 "num=" + num +
                 ", text='" + text + '\'' +
                 ", literal=" + literal +
+                ", denom=" + denom +
                 '}';
     }
 
