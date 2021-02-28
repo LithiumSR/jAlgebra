@@ -50,6 +50,7 @@ Specification:
     }
 }
 ```
+More examples can be found [here](EXAMPLES.md)
 
 ## Build and deploy
 In order to build and deploy the webservice use the following command:
