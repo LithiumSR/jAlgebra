@@ -49,7 +49,6 @@ public class ExpressionSolver {
             int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
             ret.add(new AlgebraValue(sum, key.copy(), key2));
         }));
-
         return AlgebraHelper.replaceDenominatorWithMultiply(AlgebraHelper.convertListToPlusTree(ret));
     }
 
@@ -164,8 +163,8 @@ public class ExpressionSolver {
      */
 
     private static AlgebraElement applyTransformationDivide(AlgebraElement op1, AlgebraElement op2) {
-        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(op1);
-        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(op2);
+        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1))));
+        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2))));
         Map<String, Integer> commonOp2 = AlgebraHelper.getCommonLiterals(nodes2);
         int gcdOp2 = AlgebraHelper.findGCD(nodes2);
         LinkedList<AlgebraValue> tmp = new LinkedList<>();
@@ -175,10 +174,11 @@ public class ExpressionSolver {
                     Map.Entry::getValue));
             LiteralPart newLiteral = AlgebraHelper.subtractLiteral(litn, adjustedCommonOp2);
             int gcd = AlgebraHelper.gcd(n.getNum(), gcdOp2);
+            List<AlgebraValue> newDenominator = nodes2.stream().map((it) -> applyTransformationDivide(new AlgebraValue(it.getNum() / gcd, AlgebraHelper.subtractLiteral(it.getLiteralPart(), adjustedCommonOp2)), it.getDenom())).map(AlgebraHelper::getValues).flatMap(List::stream).filter(it -> it.getNum()!= 1 || !it.getLiteralPart().getLiterals().isEmpty() || it.getDenom() != null).collect(Collectors.toList());
 
-            List<AlgebraValue> newDenominator = nodes2.stream().map((it) -> applyTransformationDivide(new AlgebraValue(it.getNum() / gcd, AlgebraHelper.subtractLiteral(it.getLiteralPart(), adjustedCommonOp2)), it.getDenom())).map(AlgebraHelper::getValues).flatMap(List::stream).collect(Collectors.toList());
-            tmp.add(new AlgebraValue(n.getNum() / gcd, newLiteral, AlgebraHelper.convertListToPlusTree(newDenominator)));
+            tmp.add(new AlgebraValue(n.getNum() / gcd, newLiteral, (newDenominator.isEmpty()) ? null : AlgebraHelper.convertListToPlusTree(newDenominator)));
         }
+
         return AlgebraHelper.convertListToPlusTree(tmp);
     }
 

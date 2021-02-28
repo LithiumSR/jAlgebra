@@ -57,7 +57,6 @@ public class AlgebraHelper {
             if (el instanceof AlgebraValue) ret.add((AlgebraValue) el);
             else {
                 AlgebraNode node = (AlgebraNode) el;
-                System.out.println(node);
                 toCheck.add(node.getOperand1());
                 if (node.getOperand2() != null) toCheck.add(node.getOperand2());
             }
