@@ -48,12 +48,12 @@ public class AlgebraValue extends AlgebraElement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AlgebraValue that = (AlgebraValue) o;
-        return Objects.equals(num, that.num) && Objects.equals(text, that.text) && Objects.equals(literal, that.literal);
+        return Objects.equals(num, that.num) && Objects.equals(text, that.text) && Objects.equals(literal, that.literal) && Objects.equals(denom, that.denom);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(num, text, literal);
+        return Objects.hash(num, text, literal, denom);
     }
 
     @Override
