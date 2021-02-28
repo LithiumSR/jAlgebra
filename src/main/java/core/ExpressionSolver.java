@@ -166,6 +166,8 @@ public class ExpressionSolver {
     private static AlgebraElement applyTransformationDivide(AlgebraElement op1, AlgebraElement op2) {
         List<AlgebraValue> nodes1 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1))));
         List<AlgebraValue> nodes2 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2))));
+        if ((op2 instanceof AlgebraValue && ((AlgebraValue) op2).getNum() == 0) || nodes2.stream().filter(it -> it.getNum() == 0).count() ==1)
+            throw new ArithmeticException("Division by 0");
         Map<String, Integer> commonOp2 = AlgebraHelper.getCommonLiterals(nodes2);
         int gcdOp2 = AlgebraHelper.findGCD(nodes2);
         LinkedList<AlgebraValue> tmp = new LinkedList<>();
@@ -182,7 +184,7 @@ public class ExpressionSolver {
                     .flatMap(List::stream)
                     .filter(it -> it.getNum() != 1 || !it.getLiteralPart().getLiterals().isEmpty() || it.getDenom() != null)
                     .collect(Collectors.toList());
-
+            System.out.println("newDenom "+newDenominator);
             tmp.add(new AlgebraValue(n.getNum() / gcd, newLiteral, (newDenominator.isEmpty()) ? null : AlgebraHelper.convertListToPlusTree(newDenominator)));
         }
 

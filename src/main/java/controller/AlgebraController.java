@@ -30,6 +30,11 @@ public class AlgebraController {
             obj.put("error", 400);
             obj.put("message", "Invalid JSON input file");
             ctx.result(obj.toString());
+        } catch (ArithmeticException e) {
+            JSONObject obj = new JSONObject();
+            obj.put("error", 400);
+            obj.put("message", "Division by 0");
+            ctx.result(obj.toString());
         } catch (Exception e) {
             JSONObject obj = new JSONObject();
             obj.put("error", 500);
