@@ -18,14 +18,15 @@ public class ExpressionSolver {
      */
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
-        return AlgebraHelper.replaceDenominatorWithMultiply(mergePlusTree(plusTree));
+        return AlgebraHelper.replaceDenominatorWithMultiply(mergePlusTree(plusTree, true));
     }
 
     /**
      * @param root Starting element of an expression tree containing only PLUS operations
+     * @param removeZero Boolean value flag. If true zero value elements are removed from the output otherwise they are kept
      * @return Starting element of an expression tree where 1) Elements with same literals and denominator are summed 2) Denominators are replaced with a multiply operation
      */
-    private static AlgebraElement mergePlusTree(AlgebraElement root) {
+    private static AlgebraElement mergePlusTree(AlgebraElement root, boolean removeZero) {
         HashMap<LiteralPart, List<AlgebraValue>> sameLiterals = new HashMap<>();
         List<AlgebraValue> values = AlgebraHelper.getValues(root);
         for (AlgebraValue value : values) {
@@ -48,7 +49,7 @@ public class ExpressionSolver {
 
         sameLiteralsGroupedByDenom.forEach((key, value) -> value.forEach((key2, value2) -> {
             int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
-            ret.add(new AlgebraValue(sum, key.copy(), key2));
+            if (sum != 0 || !removeZero) ret.add(new AlgebraValue(sum, key.copy(), key2));
         }));
         return AlgebraHelper.convertListToPlusTree(ret);
     }
@@ -164,8 +165,8 @@ public class ExpressionSolver {
      */
 
     private static AlgebraElement applyTransformationDivide(AlgebraElement op1, AlgebraElement op2) {
-        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1))));
-        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2))));
+        List<AlgebraValue> nodes1 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op1)), false));
+        List<AlgebraValue> nodes2 = AlgebraHelper.getValues(mergePlusTree(AlgebraHelper.convertListToPlusTree(AlgebraHelper.getValues(op2)), false));
         if ((op2 instanceof AlgebraValue && ((AlgebraValue) op2).getNum() == 0) || nodes2.stream().filter(it -> it.getNum() == 0).count() ==1)
             throw new ArithmeticException("Division by 0");
         Map<String, Integer> commonOp2 = AlgebraHelper.getCommonLiterals(nodes2);
