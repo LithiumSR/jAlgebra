@@ -142,8 +142,8 @@ public class ExpressionSolver {
      */
     private static AlgebraElement applyTransformationMultiply(AlgebraElement op1, AlgebraElement op2) {
         if (op1 == null && op2 == null) return null;
-        List<AlgebraValue> nodes1 = (op1 == null) ? List.of(new AlgebraValue(1,new LiteralPart())) : AlgebraHelper.getValues(op1);
-        List<AlgebraValue> nodes2 = (op2 == null) ? List.of(new AlgebraValue(1,new LiteralPart())) : AlgebraHelper.getValues(op2);
+        List<AlgebraValue> nodes1 = (op1 == null) ? List.of(new AlgebraValue(1, new LiteralPart())) : AlgebraHelper.getValues(op1);
+        List<AlgebraValue> nodes2 = (op2 == null) ? List.of(new AlgebraValue(1, new LiteralPart())) : AlgebraHelper.getValues(op2);
         LinkedList<AlgebraValue> tmp = new LinkedList<>();
         for (AlgebraValue n : nodes1) {
             LiteralPart litn = n.getLiteralPart();
@@ -151,7 +151,7 @@ public class ExpressionSolver {
                 LiteralPart litk = k.getLiteralPart();
                 Map<String, Integer> newLitMap = new HashMap<>(litn.getLiterals());
                 litk.getLiterals().forEach((key, value) -> newLitMap.put(key, newLitMap.getOrDefault(key, 0) + value));
-                tmp.add(new AlgebraValue((n.getNum() * k.getNum()), new LiteralPart(newLitMap), applyTransformationMultiply(n.getDenom(),k.getDenom())));
+                tmp.add(new AlgebraValue((n.getNum() * k.getNum()), new LiteralPart(newLitMap), applyTransformationMultiply(n.getDenom(), k.getDenom())));
             }
         }
         return AlgebraHelper.convertListToPlusTree(tmp);
@@ -181,7 +181,6 @@ public class ExpressionSolver {
         }
         return AlgebraHelper.convertListToPlusTree(tmp);
     }
-
 
 
 }

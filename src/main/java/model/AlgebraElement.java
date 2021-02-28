@@ -1,8 +1,8 @@
 package model;
 
-public abstract class AlgebraElement implements JsonSerializable {
-}
-
 interface JsonSerializable {
     String toJson();
+}
+
+public abstract class AlgebraElement implements JsonSerializable {
 }

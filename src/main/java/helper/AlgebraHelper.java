@@ -37,7 +37,8 @@ public class AlgebraHelper {
         } else {
             AlgebraValue value = (AlgebraValue) element;
             if (value.getDenom() == null) return new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null);
-            else return new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null), replaceDenominatorWithMultiply(value.getDenom()));
+            else
+                return new AlgebraNode(NodeType.MULTIPLY, null, new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null), replaceDenominatorWithMultiply(value.getDenom()));
         }
     }
 
@@ -69,8 +70,7 @@ public class AlgebraHelper {
      * @param b Integer representing the second operand
      * @return GCD between the two input operands
      */
-    public static int gcd(int a, int b)
-    {
+    public static int gcd(int a, int b) {
         if (a == 0)
             return Math.abs(b);
         return Math.abs(gcd(b % a, a));
@@ -80,15 +80,13 @@ public class AlgebraHelper {
      * @param list List of AlgebraValue
      * @return GCD across the elements of the input list
      */
-    public static int findGCD(List<AlgebraValue> list)
-    {
+    public static int findGCD(List<AlgebraValue> list) {
         if (list.isEmpty()) return 1;
         int result = 0;
-        for (AlgebraValue element: list){
+        for (AlgebraValue element : list) {
             result = gcd(result, element.getNum());
 
-            if(result == 1)
-            {
+            if (result == 1) {
                 return 1;
             }
         }
@@ -117,17 +115,18 @@ public class AlgebraHelper {
 
 
     /**
-     * @param lit LiteralPart from which literals are going to be substracted from
+     * @param lit         LiteralPart from which literals are going to be substracted from
      * @param subtractMap Map representing the literals (with their exponent) that are going to be removed
      * @return LiteralPart with the chosen literals removed
      */
     public static LiteralPart subtractLiteral(LiteralPart lit, Map<String, Integer> subtractMap) {
         Map<String, Integer> tmpMap = new HashMap<>(lit.getLiterals());
-        subtractMap.keySet().forEach((it) -> {if (tmpMap.containsKey(it)) tmpMap.put(it, tmpMap.get(it) - subtractMap.get(it));});
-        return new LiteralPart(tmpMap.entrySet().stream().filter(it -> it.getValue()!=0).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        subtractMap.keySet().forEach((it) -> {
+            if (tmpMap.containsKey(it)) tmpMap.put(it, tmpMap.get(it) - subtractMap.get(it));
+        });
+        return new LiteralPart(tmpMap.entrySet().stream().filter(it -> it.getValue() != 0).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
     }
-
 
 
 }
