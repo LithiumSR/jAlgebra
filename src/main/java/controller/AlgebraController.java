@@ -2,6 +2,7 @@ package controller;
 
 import core.ExpressionParser;
 import core.ExpressionSolver;
+import exception.AlgebraParserException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import model.AlgebraElement;
@@ -24,8 +25,9 @@ public class AlgebraController {
             }
             AlgebraElement root = ExpressionParser.getAlgebraElement(expression);
             AlgebraElement solution = ExpressionSolver.solve(root);
-            ctx.result(solution.toJson());
-        } catch (JSONException exception) {
+            if (solution == null) ctx.result("");
+            else ctx.result(solution.toJson());
+        } catch (JSONException| AlgebraParserException e) {
             JSONObject obj = new JSONObject();
             obj.put("exception", 400);
             obj.put("message", "Invalid JSON input file");
