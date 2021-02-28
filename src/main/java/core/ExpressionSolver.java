@@ -35,15 +35,16 @@ public class ExpressionSolver {
             tmp.add(value);
         }
         List<AlgebraValue> ret = new LinkedList<>();
-        var sameLiteralsGroupedByDenom = sameLiterals.entrySet().stream().map(it -> Map.entry(it.getKey(), it.getValue().stream().collect(Collectors.toMap(AlgebraValue::getDenom, x -> {
-            List<AlgebraValue> list = new ArrayList<>();
-            list.add(x);
-            return list;
-        }, (left, right) -> {
-            left.addAll(right);
-            return left;
-        }, HashMap::new)))).collect(Collectors.toMap(Map.Entry::getKey,
-                Map.Entry::getValue));
+        var sameLiteralsGroupedByDenom = sameLiterals.entrySet().stream()
+                .map(it -> Map.entry(it.getKey(), it.getValue().stream().collect(Collectors.toMap(AlgebraValue::getDenom, x -> {
+                        List<AlgebraValue> list = new ArrayList<>();
+                        list.add(x);
+                        return list;
+                    }, (left, right) -> {
+                        left.addAll(right);
+                        return left;
+                    }, HashMap::new))))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         sameLiteralsGroupedByDenom.forEach((key, value) -> value.forEach((key2, value2) -> {
             int sum = value2.stream().mapToInt(AlgebraValue::getNum).sum();
@@ -170,11 +171,17 @@ public class ExpressionSolver {
         LinkedList<AlgebraValue> tmp = new LinkedList<>();
         for (AlgebraValue n : nodes1) {
             LiteralPart litn = n.getLiteralPart();
-            Map<String, Integer> adjustedCommonOp2 = commonOp2.entrySet().stream().filter(it -> litn.getLiterals().containsKey(it.getKey())).map(it -> Map.entry(it.getKey(), Math.min(litn.getExponent(it.getKey()), it.getValue()))).collect(Collectors.toMap(Map.Entry::getKey,
-                    Map.Entry::getValue));
+            Map<String, Integer> adjustedCommonOp2 = commonOp2.entrySet().stream()
+                    .filter(it -> litn.getLiterals().containsKey(it.getKey()))
+                    .map(it -> Map.entry(it.getKey(), Math.min(litn.getExponent(it.getKey()), it.getValue())))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             LiteralPart newLiteral = AlgebraHelper.subtractLiteral(litn, adjustedCommonOp2);
             int gcd = AlgebraHelper.gcd(n.getNum(), gcdOp2);
-            List<AlgebraValue> newDenominator = nodes2.stream().map((it) -> applyTransformationDivide(new AlgebraValue(it.getNum() / gcd, AlgebraHelper.subtractLiteral(it.getLiteralPart(), adjustedCommonOp2)), it.getDenom())).map(AlgebraHelper::getValues).flatMap(List::stream).filter(it -> it.getNum()!= 1 || !it.getLiteralPart().getLiterals().isEmpty() || it.getDenom() != null).collect(Collectors.toList());
+            List<AlgebraValue> newDenominator = nodes2.stream().map((it) -> applyTransformationDivide(new AlgebraValue(it.getNum() / gcd, AlgebraHelper.subtractLiteral(it.getLiteralPart(), adjustedCommonOp2)), it.getDenom()))
+                    .map(AlgebraHelper::getValues)
+                    .flatMap(List::stream)
+                    .filter(it -> it.getNum() != 1 || !it.getLiteralPart().getLiterals().isEmpty() || it.getDenom() != null)
+                    .collect(Collectors.toList());
 
             tmp.add(new AlgebraValue(n.getNum() / gcd, newLiteral, (newDenominator.isEmpty()) ? null : AlgebraHelper.convertListToPlusTree(newDenominator)));
         }

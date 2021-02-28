@@ -22,13 +22,13 @@ public class ExpressionParser {
      */
     public static AlgebraElement getAlgebraElement(JSONObject object) throws AlgebraParserError {
         try {
-            return _getAlgebraElement(object);
+            return auxGetAlgebraElement(object);
         } catch (ClassCastException e) {
             throw new AlgebraParserError("Invalid cast", e);
         }
     }
 
-    private static AlgebraElement _getAlgebraElement(JSONObject object) throws AlgebraParserError {
+    private static AlgebraElement auxGetAlgebraElement(JSONObject object) throws AlgebraParserError {
         if (object.has("value") && object.has("literal")) {
             Map<String, Integer> literalMap = new HashMap<>();
             JSONArray arrayLiteral = object.getJSONArray("literal");
