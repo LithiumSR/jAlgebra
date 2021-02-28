@@ -16,6 +16,11 @@ import java.util.Map;
 
 public class ExpressionParser {
 
+    /**
+     * @param object JSONObject representing the expression tree
+     * @return AlgebraElement representing the root of the expression tree
+     * @throws AlgebraParserError Thrown when input JSON is not following the correct schema
+     */
     public static AlgebraElement getAlgebraElement(JSONObject object) throws AlgebraParserError {
         try {
             return _getAlgebraElement(object);

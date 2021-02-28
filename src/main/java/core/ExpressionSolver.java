@@ -12,11 +12,19 @@ import java.util.stream.Collectors;
 
 public class ExpressionSolver {
 
+    /**
+     * @param root Starting AlgebraElement of the expression tree
+     * @return AlgebraElement of the expression tree representing the solution
+     */
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
         return mergePlusTree(plusTree);
     }
 
+    /**
+     * @param root Starting element of an expression tree containing only PLUS operations
+     * @return Starting element of an expression tree where 1) Elements with same literals and denominator are summed 2) Denominators are replaced with a multiply operation
+     */
     private static AlgebraElement mergePlusTree(AlgebraElement root) {
         HashMap<LiteralPart, List<AlgebraValue>> sameLiterals = new HashMap<>();
         List<AlgebraValue> values = AlgebraHelper.getValues(root);
@@ -46,6 +54,10 @@ public class ExpressionSolver {
     }
 
 
+    /**
+     * @param root Starting AlgebraElement of the expression tree
+     * @return Starting AlgebraElement of an expresion tree containing only PLUS operations
+     */
     public static AlgebraElement computePlusTree(AlgebraElement root) {
         if (root instanceof AlgebraValue) {
             return root;
@@ -60,6 +72,10 @@ public class ExpressionSolver {
         }
     }
 
+    /**
+     * @param node AlgebraNode featuring an unary operation
+     * @return AlgebraValue after the execution of the unary operation
+     */
     private static AlgebraValue computeUnary(AlgebraNode node) {
         AlgebraValue op1 = ((AlgebraValue) node.getOperand1());
         switch (node.getFunc()) {
@@ -72,6 +88,10 @@ public class ExpressionSolver {
         }
     }
 
+    /**
+     * @param node AlgebraNode featuring a binary operation
+     * @return AlgebraElement after the execution of the binary operation
+     */
     private static AlgebraElement computeBinary(AlgebraNode node) {
         AlgebraElement op1 = node.getOperand1();
         AlgebraElement op2 = node.getOperand2();
@@ -90,7 +110,20 @@ public class ExpressionSolver {
     }
 
 
-    private static AlgebraElement applyTransformationMinus(AlgebraElement op) {
+    /**
+     * @param op1 First operand of the MINUS operation
+     * @param op2 Second operand of the MINUS operation
+     * @return AlgebraElement where MINUS operation has been replaced with a PLUS operation (therefore one operand has its sign changed recursively)
+     */
+    private static AlgebraElement applyTransformationMinus(AlgebraElement op1, AlgebraElement op2) {
+        return new AlgebraNode(NodeType.PLUS, null, op1, flipSign(op2));
+    }
+
+    /**
+     * @param op AlgebraElement whose sign is going to be flipped
+     * @return AlgebraElement with flipped sign
+     */
+    private static AlgebraElement flipSign(AlgebraElement op) {
         if (op instanceof AlgebraValue) {
             var elem = (AlgebraValue) op;
             return new AlgebraValue(elem.getNum() * -1, elem.getLiteralPart().copy());
@@ -102,6 +135,11 @@ public class ExpressionSolver {
         }
     }
 
+    /**
+     * @param op1 First operand of the MULTIPLY operation
+     * @param op2 Second operand of the MULTIPLY operation
+     * @return AlgebraElement (a PLUS only tree) containing the result of the MULTIPLY operation
+     */
     private static AlgebraElement applyTransformationMultiply(AlgebraElement op1, AlgebraElement op2) {
         if (op1 == null && op2 == null) return null;
         List<AlgebraValue> nodes1 = (op1 == null) ? List.of(new AlgebraValue(1,new LiteralPart())) : AlgebraHelper.getValues(op1);
@@ -118,6 +156,12 @@ public class ExpressionSolver {
         }
         return AlgebraHelper.convertListToPlusTree(tmp);
     }
+
+    /**
+     * @param op1 First operand of the DIVIDE operation
+     * @param op2 Second operand of the DIVIDE operation
+     * @return AlgebraElement (a PLUS only tree) containing the result of the DIVIDE operation
+     */
 
     private static AlgebraElement applyTransformationDivide(AlgebraElement op1, AlgebraElement op2) {
         List<AlgebraValue> nodes1 = AlgebraHelper.getValues(op1);
