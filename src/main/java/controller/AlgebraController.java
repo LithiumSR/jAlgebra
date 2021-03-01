@@ -17,10 +17,15 @@ public class AlgebraController {
 
     private static void post(Context ctx) {
         String body = ctx.body();
+        if (body.isEmpty()) {
+            ctx.result(new JSONObject().toString());
+            return;
+        }
+
         try {
             JSONObject expression = new JSONObject(body);
             if (expression.isEmpty()) {
-                ctx.json(new JSONObject());
+                ctx.result(new JSONObject().toString());
                 return;
             }
             AlgebraElement root = ExpressionParser.getAlgebraElement(expression);
