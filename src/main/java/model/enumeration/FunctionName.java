@@ -1,6 +1,6 @@
 package model.enumeration;
 
-public enum NodeName {
+public enum FunctionName {
     ABS, SIZEOF;
 
     public boolean isUnary() {

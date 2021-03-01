@@ -68,7 +68,7 @@ public class AlgebraHelper {
         if (element == null) return null;
         if (element instanceof AlgebraNode) {
             AlgebraNode node = (AlgebraNode) element;
-            return new AlgebraNode(node.getType(), node.getFunc(), expandDenominator(node.getOperand1()), expandDenominator(node.getOperand2()));
+            return new AlgebraNode(node.getType(), node.getFunctionName(), expandDenominator(node.getOperand1()), expandDenominator(node.getOperand2()));
         } else {
             AlgebraValue value = (AlgebraValue) element;
             if (value.getDenom() == null) return new AlgebraValue(value.getNum(), value.getLiteralPart().copy(), null);

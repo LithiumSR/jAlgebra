@@ -5,7 +5,7 @@ import model.AlgebraElement;
 import model.AlgebraNode;
 import model.AlgebraValue;
 import model.LiteralPart;
-import model.enumeration.NodeName;
+import model.enumeration.FunctionName;
 import model.enumeration.NodeType;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +48,7 @@ public class ExpressionParser {
             if (type == NodeType.FUNCTION) {
                 if (!object.has("name") || !object.has("op1"))
                     throw new AlgebraParserException("Missing op1 for unary function");
-                NodeName name = NodeName.valueOf(object.getString("name").toUpperCase());
+                FunctionName name = FunctionName.valueOf(object.getString("name").toUpperCase());
                 AlgebraElement op1 = getAlgebraElement(object.getJSONObject("op1"));
                 if (isFunctionCompatible(name, op1)) return new AlgebraNode(type, name, op1, null);
                 else throw new ClassCastException("Invalid pair function-value");
@@ -62,7 +62,7 @@ public class ExpressionParser {
         } else throw new AlgebraParserException("Unknown algebra element");
     }
 
-    private static boolean isFunctionCompatible(NodeName name, AlgebraElement element) {
+    private static boolean isFunctionCompatible(FunctionName name, AlgebraElement element) {
         if (element instanceof AlgebraValue) {
             switch (name) {
                 case ABS:

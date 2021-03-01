@@ -4,7 +4,7 @@ import model.AlgebraElement;
 import model.AlgebraNode;
 import model.AlgebraValue;
 import model.LiteralPart;
-import model.enumeration.NodeName;
+import model.enumeration.FunctionName;
 import model.enumeration.NodeType;
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +18,13 @@ public class ExpressionSolverTest {
 
     @Test
     public void testSolverAbsValue() {
-        AlgebraElement ret = ExpressionSolver.solve(new AlgebraNode(NodeType.FUNCTION, NodeName.ABS, new AlgebraValue(-12, new LiteralPart(Map.of("a", 3))), null));
+        AlgebraElement ret = ExpressionSolver.solve(new AlgebraNode(NodeType.FUNCTION, FunctionName.ABS, new AlgebraValue(-12, new LiteralPart(Map.of("a", 3))), null));
         assertTrue(ret instanceof AlgebraValue && ((AlgebraValue) ret).getNum() == 12 && ((AlgebraValue) ret).getLiteralPart().getExponent("a") == 3);
     }
 
     @Test
     public void testSolverSizeOfValue() {
-        AlgebraElement ret = ExpressionSolver.solve(new AlgebraNode(NodeType.FUNCTION, NodeName.SIZEOF, new AlgebraValue("ciao"), null));
+        AlgebraElement ret = ExpressionSolver.solve(new AlgebraNode(NodeType.FUNCTION, FunctionName.SIZEOF, new AlgebraValue("ciao"), null));
         assertTrue(ret instanceof AlgebraValue && ((AlgebraValue) ret).getNum() == 4);
     }
 

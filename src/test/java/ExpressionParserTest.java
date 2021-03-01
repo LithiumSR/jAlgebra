@@ -1,7 +1,7 @@
 import exception.AlgebraParserException;
 import model.AlgebraNode;
 import model.AlgebraValue;
-import model.enumeration.NodeName;
+import model.enumeration.FunctionName;
 import model.enumeration.NodeType;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ public class ExpressionParserTest {
                         "      \"literal\":[]" +
                         "   }\n" +
                         "}"));
-        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.ABS, new AlgebraValue(10, null), null), ret);
+        assertEquals(new AlgebraNode(NodeType.FUNCTION, FunctionName.ABS, new AlgebraValue(10, null), null), ret);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ExpressionParserTest {
                         "      \"literal\":[]" +
                         "   }\n" +
                         "}"));
-        assertEquals(new AlgebraNode(NodeType.FUNCTION, NodeName.SIZEOF, new AlgebraValue("hello"), null), ret);
+        assertEquals(new AlgebraNode(NodeType.FUNCTION, FunctionName.SIZEOF, new AlgebraValue("hello"), null), ret);
     }
 
     @Test

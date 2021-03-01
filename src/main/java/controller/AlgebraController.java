@@ -27,7 +27,7 @@ public class AlgebraController {
             AlgebraElement solution = ExpressionSolver.solve(root);
             if (solution == null) ctx.result("");
             else ctx.result(solution.toJson());
-        } catch (JSONException| AlgebraParserException e) {
+        } catch (JSONException | AlgebraParserException e) {
             JSONObject obj = new JSONObject();
             obj.put("exception", 400);
             obj.put("message", "Invalid JSON input file");

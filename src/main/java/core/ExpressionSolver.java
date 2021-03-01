@@ -39,7 +39,7 @@ public class ExpressionSolver {
         } else {
             AlgebraElement right = computePlusTree(node.getOperand2());
             AlgebraElement left = computePlusTree(node.getOperand1());
-            return computeBinary(new AlgebraNode(node.getType(), node.getFunc(), left, right));
+            return computeBinary(new AlgebraNode(node.getType(), node.getFunctionName(), left, right));
         }
     }
 
@@ -50,7 +50,7 @@ public class ExpressionSolver {
      */
     private static AlgebraValue computeUnary(AlgebraNode node) {
         AlgebraValue op1 = ((AlgebraValue) node.getOperand1());
-        switch (node.getFunc()) {
+        switch (node.getFunctionName()) {
             case ABS:
                 return new AlgebraValue(Math.abs(op1.getNum()), op1.getLiteralPart().copy());
             case SIZEOF:
@@ -69,7 +69,7 @@ public class ExpressionSolver {
         AlgebraElement op2 = node.getOperand2();
         switch (node.getType()) {
             case PLUS:
-                return new AlgebraNode(node.getType(), node.getFunc(), op1, op2);
+                return new AlgebraNode(node.getType(), node.getFunctionName(), op1, op2);
             case MINUS:
                 return applyTransformationMinus(op1, op2);
             case MULTIPLY:
@@ -103,7 +103,7 @@ public class ExpressionSolver {
             var elem = (AlgebraNode) op;
             AlgebraElement op1 = flipSign(elem.getOperand1());
             AlgebraElement op2 = flipSign(elem.getOperand2());
-            return new AlgebraNode(NodeType.PLUS, elem.getFunc(), op1, op2);
+            return new AlgebraNode(NodeType.PLUS, elem.getFunctionName(), op1, op2);
         }
     }
 
