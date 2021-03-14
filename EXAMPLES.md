@@ -17,7 +17,7 @@
 {
     "type": "minus",
     "op1": {
-        "value": 3,
+        "value": 2,
         "literal": [{
                 "value": "a",
                 "exponent": 1
