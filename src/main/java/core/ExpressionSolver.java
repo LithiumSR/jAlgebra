@@ -21,7 +21,8 @@ public class ExpressionSolver {
      */
     public static AlgebraElement solve(AlgebraElement root) {
         AlgebraElement plusTree = computePlusTree(root);
-        return AlgebraHelper.expandDenominator(AlgebraHelper.mergePlusTree(plusTree, true));
+        AlgebraElement ret = AlgebraHelper.expandDenominator(AlgebraHelper.mergePlusTree(plusTree, true));
+        return (ret != null) ? ret : new AlgebraValue(0, new LiteralPart());
     }
 
 
